@@ -1,14 +1,12 @@
 //sets current date and time onto page 
 $('#currentDay').text(moment().format('dddd') +","+(moment().format('MMMM Do YYYY, hh:mm:ss a')));
-//runns upon opening page
 $(document).ready(function(){
 
-    
+    var text = document.querySelectorAll(".ToDo"); 
 
 // creates varriable to target the save button
 var saveBtn= $('.saveBtn');
-//creates varriable to track current time by the hour
-var currentTime=moment().hours();
+
 
 
 //save button to save input tasks to be completed and sets items in the dom
@@ -18,29 +16,21 @@ var id=$(this).parent().attr('id')
 localStorage.setItem(id,inputValue)
 });
 
+//changes color of past present and future to css styles
+var updateHour = function() {
+    var currentHour = moment().hour();
+    
+    for (var i = 0; i < text.length; i++) {
+        if (text[i].id < currentHour) {
+            text[i].classList.add("past");
 
-//function to target div class time within div class time-block
-function updateHour () {
-$('.time-block').each(function(){
-var timeBlock= $(this).attr('Time')
-
-
-//if timeblock time is less then current time its in the past and will be red
-if (currentTime > timeBlock) {
-    $(this).addClass('past')
-}
-
-//else if the timeblock is more then current time its in the future and will be green
-else if(currentTime < timeBlock) {
-    $(this).addClass('future')
-}
-
-//else the time is present sice neither two prior conditions were met
-else{
-    $(this).addClass('present')
-}
-})
-}
+        } else if (text[i].id > currentHour) {
+            text[i].classList.add("future");
+        } else {
+            text[i].classList.add("present");
+        } 
+    }
+};
 
 //will load info onto the page by selecting its key and checking if there is data stored then will load onto page if data is stored
 function loadinfo () {
@@ -52,7 +42,7 @@ function loadinfo () {
     }
 }
 
-//functions calling loadinfo and updatehour
+//functions calling loadinfo and
 loadinfo ();
 updateHour();
 })
